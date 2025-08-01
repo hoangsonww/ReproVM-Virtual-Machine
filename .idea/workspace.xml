@@ -5,16 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c08e518f-716b-4beb-8850-b700104abd1a" name="Changes" comment="final(VM): VM basics done with parallel execution">
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ci_restore_cache.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/clean_cache.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crc32_asm.asm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pipeline_manifest.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/run_pipeline.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scripts/analyze.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scripts/clean.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scripts/package.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,7 +77,7 @@
       <updated>1734594272293</updated>
       <workItem from="1734594273367" duration="13000" />
       <workItem from="1754015689831" duration="1449000" />
-      <workItem from="1754017296101" duration="326000" />
+      <workItem from="1754017296101" duration="939000" />
     </task>
     <task id="LOCAL-00001" summary="final(VM): VM basics done with parallel execution">
       <option name="closed" value="true" />
@@ -96,7 +87,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754017128081</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="final(VM): VM basics done with parallel execution">
+      <option name="closed" value="true" />
+      <created>1754017627468</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1754017627468</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

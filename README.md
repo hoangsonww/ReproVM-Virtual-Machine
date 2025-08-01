@@ -26,10 +26,8 @@
 <!-- Polyglot extensions -->
 <img alt="Go" src="https://img.shields.io/badge/Go-language-cyan?style=for-the-badge&logo=go&logoColor=white" />
 <img alt="Rust" src="https://img.shields.io/badge/Rust-language-black?style=for-the-badge&logo=rust&logoColor=white" />
-<img alt="Node.js" src="https://img.shields.io/badge/Node.js-runtime-brightgreen?style=for-the-badge&logo=node.js&logoColor=white" />
-<img alt="npm" src="https://img.shields.io/badge/npm-package-red?style=for-the-badge&logo=npm&logoColor=white" />
 <img alt="Ruby" src="https://img.shields.io/badge/Ruby-language-red?style=for-the-badge&logo=ruby&logoColor=white" />
-<img alt="Assembly (NASM)" src="https://img.shields.io/badge/Assembly-NASM-darkgrey?style=for-the-badge&logo=asm&logoColor=white" />
+<img alt="Assembly (NASM)" src="https://img.shields.io/badge/Assembly-NASM-darkgrey?style=for-the-badge&logo=assemblyscript&logoColor=white" />
 
 <!-- Data & services -->
 <img alt="JSON" src="https://img.shields.io/badge/JSON-data-yellow?style=for-the-badge" />
@@ -38,9 +36,6 @@
 <!-- Containerization -->
 <img alt="Docker" src="https://img.shields.io/badge/Docker-container-blue?style=for-the-badge&logo=docker&logoColor=white" />
 <img alt="Docker Compose" src="https://img.shields.io/badge/Docker_Compose-orchestration-236adb?style=for-the-badge&logo=docker&logoColor=white" />
-
-<!-- Optional / examples -->
-<img alt="Python" src="https://img.shields.io/badge/Python-scripting-blue?style=for-the-badge&logo=python&logoColor=white" />
 
 <!-- UI / output -->
 <img alt="ASCII UI" src="https://img.shields.io/badge/ASCII_UI-visualization-orange?style=for-the-badge" />
