@@ -127,6 +127,56 @@ Real-world workflows suffer from repeated, wasted computation, hidden dependenci
 - **Unix compatibility**: Targeted at Unix-like environments.
 - **MIT License**: Permissive open-source licensing.
 
+```mermaid
+flowchart TB
+    U[User invokes CLI with manifest & optional targets/env flags] --> CLI["CLI Entry Point<br>(read env: FORCE, VERBOSE, targets)"]
+
+    subgraph "Input & Initialization"
+        CLI --> Parser["Manifest Parser<br>(parse DSL, validate syntax)"]
+        Parser --> DAG["Dependency DAG Builder / Scheduler<br>(build task graph, apply target filtering)"]
+        DAG --> ReadyCheck{"Any ready tasks?<br>(dependencies satisfied)"}
+    end
+
+    subgraph "Execution Engine"
+        ReadyCheck -- yes --> Dispatch["Parallel Executor / Worker Pool<br>(schedule ready tasks)"]
+        Dispatch --> TaskInstance["Task Instance"]
+
+        subgraph "Task Instance Logic"
+            TaskInstance --> ComputeHash["Compute Task Hash<br>(cmd + sorted input blob hashes + deps result hashes)"]
+            ComputeHash --> CacheLookup{"Cache record exists?<br>(task_hash) & not forced"}
+            CacheLookup -- hit & not forced --> RestoreOutputs["Restore outputs from CAS<br>(mark skipped)"]
+            CacheLookup -- miss or forced --> RunCmd["Execute shell command<br>(capture output, exit code)"]
+            RunCmd --> CmdSuccess{"Exit code == 0?"}
+            CmdSuccess -- yes --> StoreCAS["Store outputs in CAS<br>(SHA-256 content-addressed)"]
+            StoreCAS --> WriteMeta["Write cache metadata<br>(task_hash, result_hash, output map)"]
+            CmdSuccess -- no --> MarkFailed["Mark task failed<br>(record error)"]
+            RestoreOutputs --> UpdateSkipped["Update graph: skipped"]
+            WriteMeta --> UpdateSuccess["Update graph: success"]
+            MarkFailed --> UpdateFailed["Update graph: failed"]
+        end
+
+        UpdateSkipped --> DAG
+        UpdateSuccess --> DAG
+        UpdateFailed --> DAG
+        Dispatch --> ReadyCheck
+    end
+
+    ReadyCheck -- no --> AllDone{"All tasks processed?"}
+    AllDone -- yes --> Visualizer["Graph Visualizer<br>(render ASCII DAG with statuses)"]
+    Visualizer --> Summary["Final Summary & Exit Code<br>(success/failure, cache hits/misses)"]
+    AllDone -- no --> ReadyCheck
+
+    MarkFailed --> OverallFailure["Overall run marked failed"]
+    OverallFailure --> Visualizer
+    OverallFailure --> Summary
+
+    ChangeInput["Upstream input changed or manifest edited"] --> InvalidateDeps["Invalidate dependent task hashes"]
+    InvalidateDeps --> DAG
+
+    CLI --> ForceBypass["Force rebuild flag<br>(overrides cache hits)"]
+    ForceBypass --> CacheLookup
+```
+
 ## Quickstart
 
 1. Write a manifest describing your tasks (see [Manifest Specification](#manifest-specification)).  

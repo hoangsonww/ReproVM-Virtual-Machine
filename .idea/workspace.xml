@@ -5,13 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c08e518f-716b-4beb-8850-b700104abd1a" name="Changes" comment="final(VM): VM basics done with parallel execution">
-      <change afterPath="$PROJECT_DIR$/.github/CODE_OF_CONDUCT.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.github/CONTRIBUTING.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.github/ISSUE_TEMPLATE/bug_report.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.github/ISSUE_TEMPLATE/feature_request.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.github/SECURITY.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.github/pull_request_template.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +81,9 @@
       <workItem from="1754018268495" duration="353000" />
       <workItem from="1754018657464" duration="267000" />
       <workItem from="1754080249447" duration="57000" />
-      <workItem from="1754080356212" duration="31000" />
+      <workItem from="1754080356212" duration="686000" />
+      <workItem from="1754082018254" duration="82000" />
+      <workItem from="1754083095222" duration="147000" />
     </task>
     <task id="LOCAL-00001" summary="final(VM): VM basics done with parallel execution">
       <option name="closed" value="true" />
@@ -184,7 +181,31 @@
       <option name="project" value="LOCAL" />
       <updated>1754018919580</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="final(VM): VM basics done with parallel execution">
+      <option name="closed" value="true" />
+      <created>1754080389947</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1754080389947</updated>
+    </task>
+    <task id="LOCAL-00014" summary="final(VM): VM basics done with parallel execution">
+      <option name="closed" value="true" />
+      <created>1754080400482</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1754080400482</updated>
+    </task>
+    <task id="LOCAL-00015" summary="final(VM): VM basics done with parallel execution">
+      <option name="closed" value="true" />
+      <created>1754080420442</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1754080420442</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
