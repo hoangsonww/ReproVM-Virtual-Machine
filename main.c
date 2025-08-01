@@ -1,4 +1,3 @@
-// main.c
 #define _POSIX_C_SOURCE 200809L
 #include "task.h"
 #include "cas.h"

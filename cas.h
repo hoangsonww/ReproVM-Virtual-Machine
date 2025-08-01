@@ -1,4 +1,3 @@
-// cas.h
 #ifndef CAS_H
 #define CAS_H
 
