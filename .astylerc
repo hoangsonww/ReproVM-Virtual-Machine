@@ -1,0 +1,12 @@
+--style=google
+--indent=spaces=4
+--break-blocks
+--pad-oper
+--pad-header
+--convert-tabs
+--max-code-length=100
+--keep-one-line-blocks
+--add-brackets
+--align-pointer=name
+--align-reference=name
+--suffix=none
