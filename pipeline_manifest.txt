@@ -1,0 +1,41 @@
+task fetch_data {
+  cmd = curl -s -o raw.csv https://example.com/data.csv
+  inputs =
+  outputs = raw.csv
+  deps =
+}
+
+task clean_go {
+  cmd = bin/clean_go raw.csv > cleaned.csv
+  inputs = raw.csv
+  outputs = cleaned.csv
+  deps = fetch_data
+}
+
+task generate_json {
+  cmd = python3 scripts/convert_csv_to_json.py cleaned.csv > cleaned.json
+  inputs = cleaned.csv
+  outputs = cleaned.json
+  deps = clean_go
+}
+
+task analyze_rust {
+  cmd = scripts/analyze_rs
+  inputs = cleaned.json
+  outputs = metrics.txt
+  deps = generate_json
+}
+
+task report {
+  cmd = node scripts/report.js metrics.txt
+  inputs = metrics.txt
+  outputs = report.md
+  deps = analyze_rust
+}
+
+task bundle {
+  cmd = ruby scripts/package.rb final_bundle.tar.gz
+  inputs = report.md metrics.txt
+  outputs = final_bundle.tar.gz
+  deps = report
+}

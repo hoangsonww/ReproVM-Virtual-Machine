@@ -1,0 +1,26 @@
+# orchestrate ReproVM containerized execution
+version: "3.9"
+
+services:
+  reprovm:
+    build: .
+    volumes:
+      - .:/workspace:rw
+    working_dir: /workspace
+    command: ["./run_pipeline.sh"]
+    environment:
+      - REPROVM_JOBS=4
+    tty: true
+
+  dashboard:
+    image: node:20-slim
+    working_dir: /workspace
+    volumes:
+      - .:/workspace:rw
+    command: >
+      bash -c "cd dashboard && npx http-server -p 8080"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - reprovm
+    tty: true

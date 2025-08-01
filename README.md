@@ -12,6 +12,7 @@
 <!-- Storage / hashing / semantics -->
 <img alt="Content Addressed Storage" src="https://img.shields.io/badge/CAS-content--addressed_teal?style=for-the-badge&logo=database&logoColor=white" />
 <img alt="SHA-256" src="https://img.shields.io/badge/SHA--256-hashing-brightgreen?style=for-the-badge" />
+<img alt="CRC32" src="https://img.shields.io/badge/CRC32-checksum-blue?style=for-the-badge" />
 
 <!-- Tooling & ecosystem -->
 <img alt="Git" src="https://img.shields.io/badge/Git-version_control-orange?style=for-the-badge&logo=git&logoColor=white" />
@@ -19,6 +20,24 @@
 <img alt="Coreutils" src="https://img.shields.io/badge/Coreutils-UNIX_tools-grey?style=for-the-badge" />
 <img alt="curl" src="https://img.shields.io/badge/curl-HTTP_client-blue?style=for-the-badge&logo=curl&logoColor=white" />
 <img alt="tar" src="https://img.shields.io/badge/tar-archiving-brown?style=for-the-badge" />
+<img alt="AWS CLI" src="https://img.shields.io/badge/AWS_CLI-automation-orange?style=for-the-badge&logo=amazonaws&logoColor=white" />
+<img alt="S3" src="https://img.shields.io/badge/AWS_S3-storage-yellow?style=for-the-badge&logo=amazon-aws&logoColor=white" />
+
+<!-- Polyglot extensions -->
+<img alt="Go" src="https://img.shields.io/badge/Go-language-cyan?style=for-the-badge&logo=go&logoColor=white" />
+<img alt="Rust" src="https://img.shields.io/badge/Rust-language-black?style=for-the-badge&logo=rust&logoColor=white" />
+<img alt="Node.js" src="https://img.shields.io/badge/Node.js-runtime-brightgreen?style=for-the-badge&logo=node.js&logoColor=white" />
+<img alt="npm" src="https://img.shields.io/badge/npm-package-red?style=for-the-badge&logo=npm&logoColor=white" />
+<img alt="Ruby" src="https://img.shields.io/badge/Ruby-language-red?style=for-the-badge&logo=ruby&logoColor=white" />
+<img alt="Assembly (NASM)" src="https://img.shields.io/badge/Assembly-NASM-darkgrey?style=for-the-badge&logo=asm&logoColor=white" />
+
+<!-- Data & services -->
+<img alt="JSON" src="https://img.shields.io/badge/JSON-data-yellow?style=for-the-badge" />
+<img alt="HTTP Server" src="https://img.shields.io/badge/http--server-static-blue?style=for-the-badge&logo=cloudflare&logoColor=white" />
+
+<!-- Containerization -->
+<img alt="Docker" src="https://img.shields.io/badge/Docker-container-blue?style=for-the-badge&logo=docker&logoColor=white" />
+<img alt="Docker Compose" src="https://img.shields.io/badge/Docker_Compose-orchestration-236adb?style=for-the-badge&logo=docker&logoColor=white" />
 
 <!-- Optional / examples -->
 <img alt="Python" src="https://img.shields.io/badge/Python-scripting-blue?style=for-the-badge&logo=python&logoColor=white" />
@@ -62,8 +81,9 @@
     - [Integration Notes](#integration-notes)
     - [Simulated Parallel Run Output (Realistic)](#simulated-parallel-run-output-realistic)
     - [Tuning](#tuning)
-21. [Example File Layout After Successful Run](#example-file-layout-after-successful-run)
-22. [License](#license)
+21. [Docker](#docker)
+22. [Example File Layout After Successful Run](#example-file-layout-after-successful-run)
+23. [License](#license)
 
 ## Overview
 
@@ -768,6 +788,115 @@ If a task is a cache hit and skipped, it shows as `[*]` and its dependents may i
 
 * Use `-j` to control throughput; too many threads on small DAGs may add scheduling overhead, so match worker count to workload size.
 * Because output rendering is serialized, you get consistent task graph snapshots even under concurrency.
+
+Here’s a **Docker section** you can insert into the README (e.g., right after **Installation & Build** or before **Manifest Specification**):
+
+## Docker
+
+ReproVM can be run inside a container for reproducible, isolated execution environments. The provided `Dockerfile` and `docker-compose.yml` (see repo) bundle all required tools (GCC, make, Python, Node.js, Ruby, etc.), build both serial and parallel binaries, and give you a consistent runtime.
+
+### Overview
+
+- Container encapsulates build/runtime dependencies: C toolchain, shell, optional polyglot helpers (Go, Rust, Node.js, Ruby), and ReproVM itself.
+- Workspace is mounted from the host so manifests, source files, and the `.reprovm` cache/CAS are shared (and persist across container invocations).
+- Parallelism is exposed via the `reprovm_parallel` binary and optionally controlled with `-j` or environment variable `REPROVM_JOBS`.
+
+### Building the Image
+
+From the repo root:
+
+```sh
+docker build -t reprovm:latest .
+````
+
+This builds the image, compiling ReproVM (serial + parallel) and preparing ancillary scripts.
+
+### Running ReproVM with Docker
+
+Run the pipeline against your manifest with:
+
+```sh
+docker run --rm -v "$(pwd)":/workspace -w /workspace reprovm:latest ./run_pipeline.sh manifest.txt
+```
+
+Or invoke the parallel binary directly (auto-detects CPU count unless overridden):
+
+```sh
+docker run --rm -v "$(pwd)":/workspace -w /workspace reprovm:latest ./reprovm_parallel -j 4 manifest.txt
+```
+
+To pass parallelism via environment variable:
+
+```sh
+docker run --rm -v "$(pwd)":/workspace -w /workspace -e REPROVM_JOBS=8 reprovm:latest ./run_pipeline.sh manifest.txt
+```
+
+### Using docker-compose
+
+With the included `docker-compose.yml`, you can spin up the ReproVM service easily:
+
+```sh
+docker compose up reprovm
+```
+
+This mounts the current directory into `/workspace`, builds/uses the image, and runs `./run_pipeline.sh` by default. To target a specific manifest or override:
+
+```sh
+docker compose run --rm reprovm ./reprovm_parallel -j 2 pipeline_manifest.txt bundle
+```
+
+### Persisting Cache
+
+Since `.reprovm` lives in the mounted workspace, cache and CAS entries survive between container runs. To maximize CI or repeated-run performance, persist the host-side `.reprovm` directory (e.g., in CI artifacts or volume-backed storage).
+
+### Examples
+
+Cold build:
+
+```sh
+docker run --rm -v "$(pwd)":/workspace -w /workspace reprovm:latest ./reprovm_parallel manifest.txt
+```
+
+Warm rebuild (uses cache):
+
+```sh
+docker run --rm -v "$(pwd)":/workspace -w /workspace reprovm:latest ./reprovm_parallel manifest.txt
+```
+
+Run a specific target:
+
+```sh
+docker run --rm -v "$(pwd)":/workspace -w /workspace reprovm:latest ./reprovm_parallel manifest.txt checksum
+```
+
+Shell into container for inspection/debugging:
+
+```sh
+docker run --rm -it -v "$(pwd)":/workspace -w /workspace reprovm:latest bash
+# then inside:
+./reprovm_parallel -j 4 manifest.txt
+```
+
+### Cleanup
+
+To remove the built image when you no longer need it:
+
+```sh
+docker image rm reprovm:latest
+```
+
+If using docker-compose, tear down (and optionally remove volumes):
+
+```sh
+docker compose down
+```
+
+### Tips
+
+* **Bind mount the workspace** so intermediate outputs, manifests, and the cache are visible/editable from the host.
+* **Use the same `.reprovm` directory** across container invocations for maximum cache reuse.
+* **Override commands** by replacing the entrypoint/command in `docker run` or `docker-compose` if you need to run custom diagnostics (e.g., inspect `.reprovm/cache` contents).
+* **CI integration:** Build the image once, mount the repo, run the manifest, and persist `.reprovm` between jobs to drastically cut repeat run time.
 
 ## Example File Layout After Successful Run
 
