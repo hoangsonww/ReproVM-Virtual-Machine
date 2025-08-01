@@ -9,6 +9,14 @@
 <img alt="POSIX" src="https://img.shields.io/badge/POSIX-compatible-lightgrey?style=for-the-badge&logo=unix&logoColor=white" />
 <img alt="pthreads" src="https://img.shields.io/badge/pthreads-parallelism-purple?style=for-the-badge" />
 
+<!-- Formatting & linting -->
+<img alt="clang-format" src="https://img.shields.io/badge/clang--format-style-blue?style=for-the-badge&logo=llvm&logoColor=white" />
+<img alt="clang-tidy" src="https://img.shields.io/badge/clang--tidy-linting-lightblue?style=for-the-badge&logo=llvm&logoColor=white" />
+<img alt="uncrustify" src="https://img.shields.io/badge/uncrustify-formatting-grey?style=for-the-badge" />
+<img alt="AStyle" src="https://img.shields.io/badge/AStyle-formatting-blue?style=for-the-badge" />
+<img alt="EditorConfig" src="https://img.shields.io/badge/EditorConfig-configuration-black?style=for-the-badge&logo=editorconfig&logoColor=white" />
+<img alt="pre-commit" src="https://img.shields.io/badge/pre--commit-hook-green?style=for-the-badge&logo=pre-commit&logoColor=white" />
+
 <!-- Storage / hashing / semantics -->
 <img alt="Content Addressed Storage" src="https://img.shields.io/badge/CAS-content--addressed_teal?style=for-the-badge&logo=database&logoColor=white" />
 <img alt="SHA-256" src="https://img.shields.io/badge/SHA--256-hashing-brightgreen?style=for-the-badge" />
