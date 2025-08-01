@@ -149,8 +149,8 @@ If nothing has changed, subsequent runs are near-instant due to cache hits.
 ### Build
 
 ```sh
-git clone <your-repo> reprovm
-cd reprovm
+git clone https://github.com/hoangsonww/ReproVM-Virtual-Machine
+cd ReproVM-Virtual-Machine
 make
 ```
 
