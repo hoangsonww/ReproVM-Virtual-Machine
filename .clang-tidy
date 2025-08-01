@@ -1,0 +1,7 @@
+Checks: >
+  -*,
+  clang-analyzer-*,
+  modernize-*,
+  performance-*,
+  readability-*
+WarningsAsErrors: ''
