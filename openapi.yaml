@@ -1,0 +1,276 @@
+openapi: 3.0.3
+info:
+  title: ReproVM API
+  description: |
+    Production-ready API for ReproVM - Reproducible Task Virtual Machine
+
+    ReproVM provides a content-addressed caching system for reproducible task execution.
+  version: 2.0.0
+  contact:
+    name: ReproVM Team
+    url: https://github.com/hoangsonww/ReproVM-Virtual-Machine
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development server
+  - url: https://reprovm.example.com/api/v1
+    description: Production server
+
+tags:
+  - name: Tasks
+    description: Task management operations
+  - name: Cache
+    description: Cache operations
+  - name: Metrics
+    description: Metrics and monitoring
+  - name: Health
+    description: Health checks
+  - name: Config
+    description: Configuration management
+
+paths:
+  /tasks:
+    get:
+      tags: [Tasks]
+      summary: List all tasks
+      description: Retrieve a list of all tasks from the manifest
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tasks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Task'
+
+    post:
+      tags: [Tasks]
+      summary: Execute tasks
+      description: Execute specified tasks or all tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                targets:
+                  type: array
+                  items:
+                    type: string
+                force:
+                  type: boolean
+      responses:
+        '200':
+          description: Execution started
+        '400':
+          description: Invalid request
+
+  /tasks/{taskName}:
+    get:
+      tags: [Tasks]
+      summary: Get task details
+      parameters:
+        - name: taskName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+
+  /cache:
+    get:
+      tags: [Cache]
+      summary: Get cache statistics
+      responses:
+        '200':
+          description: Cache statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CacheStats'
+
+    delete:
+      tags: [Cache]
+      summary: Clear cache
+      responses:
+        '200':
+          description: Cache cleared
+
+  /cache/verify:
+    post:
+      tags: [Cache]
+      summary: Verify cache integrity
+      responses:
+        '200':
+          description: Verification results
+
+  /metrics:
+    get:
+      tags: [Metrics]
+      summary: Get Prometheus metrics
+      responses:
+        '200':
+          description: Metrics in Prometheus format
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /metrics/json:
+    get:
+      tags: [Metrics]
+      summary: Get metrics in JSON format
+      responses:
+        '200':
+          description: Metrics in JSON format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metrics'
+
+  /health:
+    get:
+      tags: [Health]
+      summary: Health check
+      responses:
+        '200':
+          description: System healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+        '503':
+          description: System unhealthy
+
+  /config:
+    get:
+      tags: [Config]
+      summary: Get current configuration
+      responses:
+        '200':
+          description: Current configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        name:
+          type: string
+        command:
+          type: string
+        inputs:
+          type: array
+          items:
+            type: string
+        outputs:
+          type: array
+          items:
+            type: string
+        dependencies:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum: [pending, running, completed, failed, cached]
+        task_hash:
+          type: string
+        result_hash:
+          type: string
+
+    CacheStats:
+      type: object
+      properties:
+        total_entries:
+          type: integer
+        total_size_bytes:
+          type: integer
+        hit_rate:
+          type: number
+        cas_objects_count:
+          type: integer
+
+    Metrics:
+      type: object
+      properties:
+        total_tasks:
+          type: integer
+        tasks_executed:
+          type: integer
+        tasks_cached:
+          type: integer
+        tasks_failed:
+          type: integer
+        cache_hit_rate:
+          type: number
+        total_execution_time_ms:
+          type: number
+        peak_memory_bytes:
+          type: integer
+
+    Health:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [OK, WARNING, CRITICAL]
+        checks:
+          type: object
+          properties:
+            cache:
+              $ref: '#/components/schemas/HealthCheck'
+            cas:
+              $ref: '#/components/schemas/HealthCheck'
+            disk:
+              $ref: '#/components/schemas/HealthCheck'
+            memory:
+              $ref: '#/components/schemas/HealthCheck'
+
+    HealthCheck:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        response_time_ms:
+          type: number
+
+    Config:
+      type: object
+      properties:
+        log_level:
+          type: string
+        parallel_jobs:
+          type: integer
+        cache_dir:
+          type: string
+        enable_metrics:
+          type: boolean
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []

@@ -1,0 +1,15 @@
+[Unit]
+Description=ReproVM Prometheus Metrics Exporter
+Documentation=https://github.com/hoangsonww/ReproVM-Virtual-Machine
+After=network.target
+
+[Service]
+Type=simple
+User=reprovm
+Group=reprovm
+ExecStart=/usr/local/bin/reprovm --prometheus-exporter --port=9090
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

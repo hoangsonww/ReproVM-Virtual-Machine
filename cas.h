@@ -1,6 +1,8 @@
 #ifndef CAS_H
 #define CAS_H
 
+#include <stddef.h>
+
 // Initialize the CAS and cache directories under base_dir (e.g., ".reprovm")
 int cas_init(const char *base_dir);
 

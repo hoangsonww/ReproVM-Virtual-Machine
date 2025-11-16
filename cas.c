@@ -14,15 +14,10 @@
 /*
  * Minimal SHA-256 implementation (public domain / simplified)
  * Based on the pseudocode from FIPS PUB 180-4.
+ * SHA256_CTX is now defined in cas.h
  */
-typedef struct {
-    uint64_t bitlen;
-    uint32_t state[8];
-    uint8_t data[64];
-    size_t datalen;
-} SHA256_CTX;
 
-static const uint32_t k[64] = {
+const uint32_t k[64] = {
     0x428a2f98ul,0x71374491ul,0xb5c0fbcful,0xe9b5dba5ul,0x3956c25bul,0x59f111f1ul,0x923f82a4ul,0xab1c5ed5ul,
     0xd807aa98ul,0x12835b01ul,0x243185beul,0x550c7dc3ul,0x72be5d74ul,0x80deb1feul,0x9bdc06a7ul,0xc19bf174ul,
     0xe49b69c1ul,0xefbe4786ul,0x0fc19dc6ul,0x240ca1ccul,0x2de92c6ful,0x4a7484aaul,0x5cb0a9dcul,0x76f988daul,
@@ -37,7 +32,7 @@ static uint32_t rotr(uint32_t x, uint32_t n) {
     return (x >> n) | (x << (32 - n));
 }
 
-static void sha256_transform(SHA256_CTX *ctx, const uint8_t data[]) {
+void sha256_transform(SHA256_CTX *ctx, const uint8_t data[]) {
     uint32_t m[64];
     for (int i = 0; i < 16; ++i)
         m[i] = (data[i*4] << 24) | (data[i*4+1] << 16) | (data[i*4+2] << 8) | (data[i*4+3]);
@@ -81,7 +76,7 @@ static void sha256_transform(SHA256_CTX *ctx, const uint8_t data[]) {
     ctx->state[7] += h;
 }
 
-static void sha256_init(SHA256_CTX *ctx) {
+void sha256_init(SHA256_CTX *ctx) {
     ctx->datalen = 0;
     ctx->bitlen = 0;
     ctx->state[0] = 0x6a09e667ul;
@@ -94,7 +89,7 @@ static void sha256_init(SHA256_CTX *ctx) {
     ctx->state[7] = 0x5be0cd19ul;
 }
 
-static void sha256_update(SHA256_CTX *ctx, const uint8_t data[], size_t len) {
+void sha256_update(SHA256_CTX *ctx, const uint8_t data[], size_t len) {
     for (size_t i = 0; i < len; ++i) {
         ctx->data[ctx->datalen++] = data[i];
         if (ctx->datalen == 64) {
@@ -105,7 +100,7 @@ static void sha256_update(SHA256_CTX *ctx, const uint8_t data[], size_t len) {
     }
 }
 
-static void sha256_final(SHA256_CTX *ctx, uint8_t hash[]) {
+void sha256_final(SHA256_CTX *ctx, uint8_t hash[]) {
     size_t i = ctx->datalen;
 
     // Pad whatever data is left in the buffer.

@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <unistd.h>
+#include <stdint.h>
 
 #define META_EXT ".meta"
 
@@ -346,11 +347,7 @@ int compute_task_hash(Task *task) {
 
     // Hash the buffer
     unsigned char digest[32];
-    // reuse SHA256 functions directly
-    // Implement temporary context here
-    extern void sha256_init(SHA256_CTX *ctx);
-    extern void sha256_update(SHA256_CTX *ctx, const uint8_t data[], size_t len);
-    extern void sha256_final(SHA256_CTX *ctx, uint8_t hash[]);
+    // reuse SHA256 functions from cas.h
     SHA256_CTX ctx;
     sha256_init(&ctx);
     sha256_update(&ctx, (unsigned char*)buf, strlen(buf));
