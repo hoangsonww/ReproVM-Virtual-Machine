@@ -1,0 +1,16 @@
+[Unit]
+Description=ReproVM Instance %i
+Documentation=https://github.com/hoangsonww/ReproVM-Virtual-Machine
+After=network.target
+
+[Service]
+Type=simple
+User=reprovm
+Group=reprovm
+WorkingDirectory=/opt/reprovm/instances/%i
+ExecStart=/usr/local/bin/reprovm_parallel /opt/reprovm/instances/%i/manifest.txt
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

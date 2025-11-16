@@ -1,0 +1,38 @@
+[Unit]
+Description=ReproVM - Reproducible Task Virtual Machine
+Documentation=https://github.com/hoangsonww/ReproVM-Virtual-Machine
+After=network.target
+
+[Service]
+Type=simple
+User=reprovm
+Group=reprovm
+WorkingDirectory=/opt/reprovm
+ExecStartPre=/usr/local/bin/reprovm --health-check
+ExecStart=/usr/local/bin/reprovm_parallel -j 4 /opt/reprovm/manifest.txt
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=reprovm
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/reprovm
+
+# Resource limits
+CPUQuota=80%
+MemoryLimit=4G
+TasksMax=256
+
+# Environment
+Environment="REPROVM_LOG_LEVEL=INFO"
+Environment="REPROVM_CACHE_DIR=/opt/reprovm/.reprovm"
+Environment="REPROVM_JOBS=4"
+
+[Install]
+WantedBy=multi-user.target
