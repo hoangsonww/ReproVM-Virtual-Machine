@@ -1,0 +1,25 @@
+# ReproVM Configuration File
+# Copy this file to .reprovm/reprovm.conf and customize as needed
+
+# Logging Configuration
+log_file=.reprovm/reprovm.log
+log_level=INFO
+
+# Cache Configuration
+cache_dir=.reprovm
+max_cache_size_mb=10240
+
+# Execution Configuration
+parallel_jobs=4
+retry_attempts=3
+timeout_seconds=3600
+
+# Performance Configuration
+enable_metrics=1
+
+# Remote CAS Configuration (optional)
+# Uncomment and configure to enable remote CAS
+# remote_cas_url=https://your-cas-server.com
+# Note: Access keys should be set via environment variables for security:
+#   REPROVM_REMOTE_CAS_ACCESS_KEY
+#   REPROVM_REMOTE_CAS_SECRET_KEY
