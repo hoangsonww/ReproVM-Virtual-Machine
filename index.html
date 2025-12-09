@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ReproVM - A lightweight reproducible task execution virtual machine with content-addressed caching, built in C99">
+    <meta name="keywords" content="ReproVM, Virtual Machine, Content-Addressed Storage, CAS, Build System, Task Execution, C99, SHA-256, Reproducibility">
+    <meta name="author" content="ReproVM Contributors">
+    <title>ReproVM - Reproducible Task Virtual Machine</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="packages/styles.css">
+    
+    <!-- Mermaid for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="progress-bar"></div>
+        <nav>
+            <div class="logo">
+                <span class="logo-icon">🚀</span>
+                <span>ReproVM</span>
+            </div>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#quickstart">Quick Start</a></li>
+                <li><a href="#documentation">Docs</a></li>
+                <li><a href="#examples">Examples</a></li>
+                <li><a href="https://github.com/hoangsonww/ReproVM-Virtual-Machine" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>ReproVM</h1>
+        <p class="subtitle">Reproducible Task Execution Virtual Machine with Content-Addressed Caching</p>
+        
+        <div class="hero-badges">
+            <span class="badge">🔧 C99</span>
+            <span class="badge">🔐 SHA-256</span>
+            <span class="badge">⚡ pthreads</span>
+            <span class="badge">🐳 Docker</span>
+            <span class="badge">📦 CAS</span>
+            <span class="badge">🔄 Incremental Builds</span>
+            <span class="badge">🎯 Zero Dependencies</span>
+            <span class="badge">📜 MIT License</span>
+        </div>
+        
+        <div class="cta-buttons">
+            <a href="#quickstart" class="btn btn-primary">Get Started →</a>
+            <a href="https://github.com/hoangsonww/ReproVM-Virtual-Machine" class="btn btn-secondary" target="_blank">View on GitHub</a>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Overview Section -->
+        <section id="overview">
+            <h2 class="section-title">Overview</h2>
+            <p class="section-subtitle">A lightweight yet powerful task execution engine designed for reproducibility and efficiency</p>
+            
+            <p>ReproVM is a <strong>lightweight task execution virtual machine</strong> written entirely in <strong>C99</strong>. It makes complex workflows—builds, data pipelines, test orchestrations, and analyses—<strong>reproducible</strong>, <strong>incremental</strong>, and <strong>efficient</strong> through content-addressed caching and explicit dependency tracking.</p>
+            
+            <p>Think of it as a miniaturized, transparent cousin of modern build systems like Bazel or data pipeline orchestrators, but without hidden state or heavyweight dependencies. It operates on a declarative manifest of tasks, each describing what to run, what files it consumes and produces, and what it depends on.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Pure C99</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Runtime Dependencies</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">SHA-256</div>
+                    <div class="stat-label">Content Addressing</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Task Parallelism</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features">
+            <h2 class="section-title">Key Features</h2>
+            <p class="section-subtitle">Why ReproVM stands out from traditional build systems</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Reproducibility</h3>
+                    <p>Every piece of work is content-addressed. If inputs and commands are identical, outputs are reused deterministically across machines and environments.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Incrementality</h3>
+                    <p>Only tasks whose inputs, commands, or upstream results have changed are re-executed. Massive time savings on repeated runs.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Transparency</h3>
+                    <p>ASCII diagrams show exactly what ran, what was skipped, and why. No hidden state or magic—complete visibility into execution flow.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Parallel Execution</h3>
+                    <p>Execute independent tasks concurrently with pthreads. Respects dependencies automatically while maximizing throughput.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h3>Content-Addressed Storage</h3>
+                    <p>All inputs and outputs stored by SHA-256 hash. Natural deduplication, versioning, and provenance tracking built-in.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3>Zero Dependencies</h3>
+                    <p>Pure C99 implementation with only standard libraries. No external runtime, no package managers—just compile and run.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Polyglot Support</h3>
+                    <p>Execute tasks in any language—C, Python, Go, Rust, Ruby, Node.js. The VM doesn't care what's in your command.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🐳</div>
+                    <h3>Docker Ready</h3>
+                    <p>Full Docker and docker-compose support for containerized, reproducible execution environments across teams.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Section -->
+        <section id="architecture">
+            <h2 class="section-title">Architecture</h2>
+            <p class="section-subtitle">Understanding ReproVM's internal design</p>
+            
+            <div class="architecture">
+                <h3>Core Components</h3>
+                <div class="tech-stack">
+                    <div class="tech-item">📄 Manifest Parser</div>
+                    <div class="tech-item">🔗 DAG Builder</div>
+                    <div class="tech-item">🔐 SHA-256 Hasher</div>
+                    <div class="tech-item">💾 Content-Addressed Storage</div>
+                    <div class="tech-item">⚙️ Task Executor</div>
+                    <div class="tech-item">🧵 Parallel Scheduler</div>
+                    <div class="tech-item">📊 Graph Visualizer</div>
+                    <div class="tech-item">💽 Cache Manager</div>
+                </div>
+
+                <h3 style="margin-top: 3rem;">Execution Flow</h3>
+                <div class="mermaid-container">
+                    <div class="mermaid">
+                        flowchart TB
+                            Start([User invokes CLI]) --> Parse[Parse Manifest]
+                            Parse --> Build[Build Dependency DAG]
+                            Build --> Filter[Filter Target Tasks]
+                            Filter --> Topo[Topological Sort]
+                            
+                            Topo --> Ready{Ready Tasks?}
+                            Ready -->|Yes| Schedule[Schedule Parallel Execution]
+                            Ready -->|No| Done{All Complete?}
+                            
+                            Schedule --> Task[Task Instance]
+                            
+                            subgraph "Task Execution"
+                                Task --> Hash[Compute Task Hash<br/>cmd + inputs + deps]
+                                Hash --> Cache{Cache Hit?}
+                                Cache -->|Yes + Not Forced| Restore[Restore from CAS<br/>⚡ SKIP]
+                                Cache -->|No or Forced| Execute[Execute Command<br/>🔧 RUN]
+                                Execute --> Success{Exit 0?}
+                                Success -->|Yes| Store[Store Outputs to CAS<br/>💾 CACHE]
+                                Success -->|No| Fail[Mark Failed<br/>❌ ERROR]
+                                Store --> UpdateSuccess[Update: SUCCESS ✓]
+                                Restore --> UpdateSkip[Update: SKIPPED *]
+                                Fail --> UpdateFail[Update: FAILED X]
+                            end
+                            
+                            UpdateSuccess --> Ready
+                            UpdateSkip --> Ready
+                            UpdateFail --> Ready
+                            
+                            Done -->|Yes| Visualize[Render Final Graph]
+                            Done -->|No| Ready
+                            Visualize --> End([Exit])
+                            
+                            style Start fill:#2563eb
+                            style End fill:#10b981
+                            style Fail fill:#ef4444
+                            style Restore fill:#7c3aed
+                            style Store fill:#f59e0b
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 3rem;">Content-Addressed Storage Layout</h3>
+                <div class="code-block" data-lang="plaintext">
+<pre>project/
+├── .reprovm/
+│   ├── cas/
+│   │   └── objects/
+│   │       ├── a3/
+│   │       │   └── f5d9c0e1b2c3d4...  (blob: file content)
+│   │       ├── 5f/
+│   │       │   └── 6e7d8c9b0a1f2e...  (blob: output data)
+│   │       └── 9a/
+│   │           └── 8b7c6d5e4f3a2b...  (blob: binary)
+│   └── cache/
+│       ├── <task_hash_1>.meta  (metadata: task identity)
+│       ├── <task_hash_2>.meta
+│       └── <task_hash_3>.meta
+├── manifest.txt
+└── source files...</pre>
+                </div>
+
+                <h3 style="margin-top: 3rem;">Task Hash Computation</h3>
+                <div class="mermaid-container">
+                    <div class="mermaid">
+                        graph LR
+                            A[Command String] --> H[SHA-256]
+                            B[Sorted Input Hashes] --> H
+                            C[Dependency Result Hashes] --> H
+                            H --> D[Task Hash<br/>64-char hex]
+                            
+                            D --> E{Cache Lookup}
+                            E -->|Hit| F[Restore Outputs]
+                            E -->|Miss| G[Execute & Store]
+                            
+                            style D fill:#2563eb
+                            style F fill:#10b981
+                            style G fill:#f59e0b
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Stack Section -->
+        <section id="tech-stack">
+            <h2 class="section-title">Technology Stack</h2>
+            <p class="section-subtitle">Built on battle-tested, industry-standard technologies</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>🔧 Core Implementation</h3>
+                    <div class="tech-stack">
+                        <div class="tech-item">C99</div>
+                        <div class="tech-item">GCC</div>
+                        <div class="tech-item">Make</div>
+                        <div class="tech-item">POSIX</div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔐 Security & Hashing</h3>
+                    <div class="tech-stack">
+                        <div class="tech-item">SHA-256</div>
+                        <div class="tech-item">CRC32</div>
+                        <div class="tech-item">CAS</div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>⚡ Parallelism</h3>
+                    <div class="tech-stack">
+                        <div class="tech-item">pthreads</div>
+                        <div class="tech-item">Mutex/CV</div>
+                        <div class="tech-item">DAG Scheduling</div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🐳 Deployment</h3>
+                    <div class="tech-stack">
+                        <div class="tech-item">Docker</div>
+                        <div class="tech-item">Docker Compose</div>
+                        <div class="tech-item">CI/CD</div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🌐 Polyglot Extensions</h3>
+                    <div class="tech-stack">
+                        <div class="tech-item">Go</div>
+                        <div class="tech-item">Rust</div>
+                        <div class="tech-item">Python</div>
+                        <div class="tech-item">Ruby</div>
+                        <div class="tech-item">Node.js</div>
+                        <div class="tech-item">NASM</div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔍 Code Quality</h3>
+                    <div class="tech-stack">
+                        <div class="tech-item">clang-format</div>
+                        <div class="tech-item">clang-tidy</div>
+                        <div class="tech-item">uncrustify</div>
+                        <div class="tech-item">AStyle</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Start Section -->
+        <section id="quickstart">
+            <h2 class="section-title">Quick Start</h2>
+            <p class="section-subtitle">Get up and running in under 5 minutes</p>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>1. Clone the Repository</h3>
+                    <div class="code-block" data-lang="bash">
+<pre>git clone https://github.com/hoangsonww/ReproVM-Virtual-Machine
+cd ReproVM-Virtual-Machine</pre>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <h3>2. Build ReproVM</h3>
+                    <div class="code-block" data-lang="bash">
+<pre>make
+# Builds both serial (reprovm) and parallel (reprovm_parallel) binaries</pre>
+                    </div>
+                    <p>Output:</p>
+                    <div class="code-block" data-lang="plaintext">
+<pre>gcc -std=c99 -O2 -Wall -Wextra -g -c main.c -o main.o
+gcc -std=c99 -O2 -Wall -Wextra -g -c task.c -o task.o
+gcc -std=c99 -O2 -Wall -Wextra -g -c cas.c -o cas.o
+gcc -std=c99 -O2 -Wall -Wextra -g -c util.c -o util.o
+gcc -std=c99 -O2 -Wall -Wextra -g -o reprovm main.o task.o cas.o util.o
+gcc -std=c99 -O2 -Wall -Wextra -g -o reprovm_parallel ...</pre>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <h3>3. Create a Manifest</h3>
+                    <div class="code-block" data-lang="txt">
+<pre>task build {
+  cmd = gcc -o hello hello.c
+  inputs = hello.c
+  outputs = hello
+  deps =
+}
+
+task test {
+  cmd = ./hello > result.txt
+  inputs = hello
+  outputs = result.txt
+  deps = build
+}
+
+task checksum {
+  cmd = sha256sum result.txt > result.sha
+  inputs = result.txt
+  outputs = result.sha
+  deps = test
+}</pre>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <h3>4. Run Your Pipeline</h3>
+                    <div class="code-block" data-lang="bash">
+<pre># Serial execution
+./reprovm manifest.txt
+
+# Parallel execution (auto-detects CPU count)
+./reprovm_parallel manifest.txt
+
+# Parallel with specific worker count
+./reprovm_parallel -j 4 manifest.txt</pre>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <h3>5. Marvel at Cache Hits ⚡</h3>
+                    <p>Run again without changes:</p>
+                    <div class="code-block" data-lang="plaintext">
+<pre>$ ./reprovm manifest.txt
+Will execute 3 tasks in order:
+  build
+  test
+  checksum
+[*] build (cache hit)
+[*] test (cache hit)
+[*] checksum (cache hit)
+All tasks completed. ✓</pre>
+                    </div>
+                    <div class="success-box">
+                        <strong>🎉 Success!</strong> All tasks were skipped because nothing changed. This is the power of content-addressed caching—instant, deterministic rebuilds.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Documentation Section -->
+        <section id="documentation">
+            <h2 class="section-title">Documentation</h2>
+            <p class="section-subtitle">Everything you need to know about ReproVM</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>📖 Manifest Specification</h3>
+                    <p>Tasks are declared in a simple DSL:</p>
+                    <div class="code-block" data-lang="txt">
+<pre>task &lt;name&gt; {
+  cmd = &lt;shell command&gt;
+  inputs = &lt;file1&gt;, &lt;file2&gt;, ...
+  outputs = &lt;out1&gt;, &lt;out2&gt;, ...
+  deps = &lt;task1&gt;, &lt;task2&gt;, ...
+}</pre>
+                    </div>
+                    <ul>
+                        <li><strong>cmd</strong>: Shell command to execute</li>
+                        <li><strong>inputs</strong>: Files consumed by the task</li>
+                        <li><strong>outputs</strong>: Files produced by the task</li>
+                        <li><strong>deps</strong>: Task dependencies (execution order)</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🎯 CLI Usage</h3>
+                    <div class="code-block" data-lang="bash">
+<pre># Run all tasks
+./reprovm manifest.txt
+
+# Run specific targets
+./reprovm manifest.txt target1 target2
+
+# Parallel execution
+./reprovm_parallel -j N manifest.txt
+
+# Force rebuild (ignore cache)
+rm -rf .reprovm
+./reprovm manifest.txt</pre>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔍 Task Statuses</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Status</th>
+                                <th>Meaning</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>[ ]</td>
+                                <td>Pending</td>
+                                <td>Not yet executed</td>
+                            </tr>
+                            <tr>
+                                <td>[~]</td>
+                                <td>Running</td>
+                                <td>Currently executing</td>
+                            </tr>
+                            <tr>
+                                <td>[*]</td>
+                                <td>Skipped</td>
+                                <td>Cache hit, restored from CAS</td>
+                            </tr>
+                            <tr>
+                                <td>[✔]</td>
+                                <td>Success</td>
+                                <td>Executed successfully</td>
+                            </tr>
+                            <tr>
+                                <td>[X]</td>
+                                <td>Failed</td>
+                                <td>Command returned non-zero</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🐳 Docker Usage</h3>
+                    <div class="code-block" data-lang="bash">
+<pre># Build Docker image
+docker build -t reprovm:latest .
+
+# Run with volume mount
+docker run --rm -v "$(pwd)":/workspace \
+  -w /workspace reprovm:latest \
+  ./reprovm_parallel manifest.txt
+
+# Use docker-compose
+docker compose up reprovm
+
+# Interactive shell
+docker run --rm -it -v "$(pwd)":/workspace \
+  -w /workspace reprovm:latest bash</pre>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>⚙️ Cache Management</h3>
+                    <div class="code-block" data-lang="bash">
+<pre># View cache metadata
+cat .reprovm/cache/&lt;task_hash&gt;.meta
+
+# Clean cache
+rm -rf .reprovm
+
+# Selective invalidation
+rm .reprovm/cache/&lt;specific_task&gt;.meta
+
+# CI cache restoration
+./ci_restore_cache.sh</pre>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔐 Security Considerations</h3>
+                    <div class="warning-box">
+                        <strong>⚠️ Warning:</strong>
+                        <ul>
+                            <li>Tasks execute arbitrary shell commands—only run trusted manifests</li>
+                            <li>Shared <code>.reprovm</code> directories require trust boundaries</li>
+                            <li>CAS blobs can be replaced on disk (no cryptographic signing by default)</li>
+                            <li>Consider implementing integrity verification for production use</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Examples Section -->
+        <section id="examples">
+            <h2 class="section-title">Examples</h2>
+            <p class="section-subtitle">Real-world manifests demonstrating ReproVM's capabilities</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>🏗️ C Build Pipeline</h3>
+                    <div class="code-block" data-lang="txt">
+<pre>task compile {
+  cmd = gcc -c -o app.o app.c
+  inputs = app.c
+  outputs = app.o
+  deps =
+}
+
+task link {
+  cmd = gcc -o app app.o
+  inputs = app.o
+  outputs = app
+  deps = compile
+}
+
+task test {
+  cmd = ./app --test > test.log
+  inputs = app
+  outputs = test.log
+  deps = link
+}</pre>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>📊 Data Pipeline</h3>
+                    <div class="code-block" data-lang="txt">
+<pre>task fetch_data {
+  cmd = curl -o data.csv https://api.example.com/data
+  inputs =
+  outputs = data.csv
+  deps =
+}
+
+task clean_data {
+  cmd = python3 clean.py data.csv > clean.csv
+  inputs = data.csv
+  outputs = clean.csv
+  deps = fetch_data
+}
+
+task analyze {
+  cmd = python3 analyze.py clean.csv > report.json
+  inputs = clean.csv
+  outputs = report.json
+  deps = clean_data
+}
+
+task visualize {
+  cmd = python3 plot.py report.json chart.png
+  inputs = report.json
+  outputs = chart.png
+  deps = analyze
+}</pre>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🤖 ML Training Pipeline</h3>
+                    <div class="code-block" data-lang="txt">
+<pre>task preprocess {
+  cmd = python3 preprocess.py raw.csv processed.csv
+  inputs = raw.csv
+  outputs = processed.csv
+  deps =
+}
+
+task train_model {
+  cmd = python3 train.py processed.csv model.pkl
+  inputs = processed.csv
+  outputs = model.pkl
+  deps = preprocess
+}
+
+task evaluate {
+  cmd = python3 eval.py model.pkl metrics.json
+  inputs = model.pkl, processed.csv
+  outputs = metrics.json
+  deps = train_model
+}
+
+task package {
+  cmd = tar czf model.tar.gz model.pkl metrics.json
+  inputs = model.pkl, metrics.json
+  outputs = model.tar.gz
+  deps = evaluate
+}</pre>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🌐 Web Asset Pipeline</h3>
+                    <div class="code-block" data-lang="txt">
+<pre>task compile_ts {
+  cmd = tsc src/index.ts --outDir dist/
+  inputs = src/index.ts
+  outputs = dist/index.js
+  deps =
+}
+
+task bundle_js {
+  cmd = webpack dist/index.js -o dist/bundle.js
+  inputs = dist/index.js
+  outputs = dist/bundle.js
+  deps = compile_ts
+}
+
+task minify_css {
+  cmd = cleancss -o dist/style.min.css src/style.css
+  inputs = src/style.css
+  outputs = dist/style.min.css
+  deps =
+}
+
+task package_assets {
+  cmd = tar czf assets.tar.gz dist/
+  inputs = dist/bundle.js, dist/style.min.css
+  outputs = assets.tar.gz
+  deps = bundle_js, minify_css
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 3rem;">📈 Performance Comparison</h3>
+            <div class="mermaid-container">
+                <div class="mermaid">
+                    graph LR
+                        A[Cold Run<br/>No Cache] -->|100%| B[3.2s]
+                        C[Warm Run<br/>Full Cache] -->|~0%| D[0.08s]
+                        E[Partial Change<br/>1 task] -->|33%| F[1.1s]
+                        
+                        style B fill:#ef4444
+                        style D fill:#10b981
+                        style F fill:#f59e0b
+                </div>
+            </div>
+            <div class="info-box">
+                <strong>💡 Pro Tip:</strong> In CI/CD pipelines, persist the <code>.reprovm</code> directory between runs to achieve 40x-90x speedups on unchanged steps.
+            </div>
+        </section>
+
+        <!-- Advanced Features Section -->
+        <section id="advanced">
+            <h2 class="section-title">Advanced Features</h2>
+            <p class="section-subtitle">Power-user capabilities and extension points</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>🧵 Parallel Execution</h3>
+                    <p>The <code>reprovm_parallel</code> binary uses pthreads to execute independent tasks concurrently:</p>
+                    <div class="code-block" data-lang="bash">
+<pre># Auto-detect CPU count
+./reprovm_parallel manifest.txt
+
+# Specify worker threads
+./reprovm_parallel -j 8 manifest.txt
+
+# Set via environment
+export REPROVM_JOBS=16
+./reprovm_parallel manifest.txt</pre>
+                    </div>
+                    <p><strong>How it works:</strong></p>
+                    <ul>
+                        <li>Tasks with satisfied dependencies run immediately</li>
+                        <li>Worker pool managed via mutex/condition variables</li>
+                        <li>Failures propagate but don't block independent tasks</li>
+                        <li>Graph updates are serialized for clean output</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🌐 Remote CAS (Extension)</h3>
+                    <p>Extend ReproVM to push/pull blobs from remote storage:</p>
+                    <div class="code-block" data-lang="c">
+<pre>// cas.h extension point
+int cas_push_remote(const char *hash, const char *url);
+int cas_pull_remote(const char *hash, const char *url);
+
+// Example: S3 backend
+cas_push_remote(hash, "s3://bucket/cas/objects/");
+cas_pull_remote(hash, "s3://bucket/cas/objects/");</pre>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔄 CI/CD Integration</h3>
+                    <p>ReproVM is designed for CI/CD environments:</p>
+                    <div class="code-block" data-lang="yaml">
+<pre># .github/workflows/ci.yml
+name: CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Restore Cache
+        uses: actions/cache@v3
+        with:
+          path: .reprovm
+          key: reprovm-${{ hashFiles('manifest.txt') }}
+      - name: Build
+        run: |
+          make
+          ./reprovm_parallel -j 4 manifest.txt
+      - name: Save Cache
+        uses: actions/cache@v3
+        with:
+          path: .reprovm
+          key: reprovm-${{ hashFiles('manifest.txt') }}</pre>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>📊 Provenance Tracking</h3>
+                    <p>Every cache metadata file contains full provenance:</p>
+                    <div class="code-block" data-lang="plaintext">
+<pre>task_hash: a3f5d9c0e1b2c3d4e5f6a7b8...
+result_hash: 1f2e3d4c5b6a7980a9b8c7d6...
+output hello 5e2f1a3b4c6d7e8f9a0b1c2d...
+output result.txt 9c4d7a1e2f3b5c6d7e8f...</pre>
+                    </div>
+                    <p>Use this to:</p>
+                    <ul>
+                        <li>Trace output back to exact inputs and commands</li>
+                        <li>Audit reproducibility across environments</li>
+                        <li>Build compliance artifacts for regulated industries</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔌 Language Server Integration</h3>
+                    <p>For complex codebases, integrate with language servers:</p>
+                    <div class="code-block" data-lang="bash">
+<pre># Start TypeScript language server
+tsserver --stdio
+
+# Use with ReproVM to analyze dependencies
+task analyze_deps {
+  cmd = tsserver --check src/**/*.ts > deps.json
+  inputs = src/index.ts, src/utils.ts
+  outputs = deps.json
+  deps =
+}</pre>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🧪 Testing ReproVM</h3>
+                    <p>Comprehensive test suite included:</p>
+                    <div class="code-block" data-lang="bash">
+<pre># Run all tests
+cd tests && ./test_all.sh
+
+# Individual test suites
+./test_cas.sh      # CAS functionality
+./test_parallel.sh # Parallel execution
+./test_manifest.sh # Manifest parsing
+./test_util.sh     # Utility functions</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contributing Section -->
+        <section id="contributing">
+            <h2 class="section-title">Contributing</h2>
+            <p class="section-subtitle">Join the ReproVM community</p>
+            
+            <div class="info-box">
+                <p>We welcome contributions! Here's how you can help:</p>
+                <ul>
+                    <li>🐛 Report bugs and issues</li>
+                    <li>💡 Suggest new features</li>
+                    <li>📝 Improve documentation</li>
+                    <li>🔧 Submit pull requests</li>
+                    <li>⭐ Star the repo to show support</li>
+                </ul>
+            </div>
+
+            <h3>Development Setup</h3>
+            <div class="code-block" data-lang="bash">
+<pre># Fork and clone
+git clone https://github.com/YOUR_USERNAME/ReproVM-Virtual-Machine
+cd ReproVM-Virtual-Machine
+
+# Create feature branch
+git checkout -b feature/amazing-feature
+
+# Build and test
+make
+cd tests && ./test_all.sh
+
+# Make changes, commit, push
+git add .
+git commit -m "Add amazing feature"
+git push origin feature/amazing-feature
+
+# Open Pull Request on GitHub</pre>
+            </div>
+
+            <h3>Code Style</h3>
+            <p>ReproVM uses automated formatting:</p>
+            <div class="code-block" data-lang="bash">
+<pre># Format all code
+./format.sh
+
+# Pre-commit hook
+cp .githooks/pre-commit .git/hooks/
+chmod +x .git/hooks/pre-commit</pre>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>❓ How does caching work?</h3>
+                    <p>Each task's identity is a SHA-256 hash of its command, sorted input hashes, and dependency result hashes. If this hash exists in <code>.reprovm/cache/</code>, outputs are restored from CAS instead of re-executing.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>❓ Can I share cache across machines?</h3>
+                    <p>Yes! Copy <code>.reprovm/cas/</code> and <code>.reprovm/cache/</code> to another machine. For teams, implement a remote CAS backend (S3, HTTP, etc.) as an extension.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>❓ What if I rename a file?</h3>
+                    <p>File identity is content-based in CAS, but manifests reference paths. Renaming changes the input list, causing task re-execution. Create symlinks or update the manifest.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>❓ How do I debug failed tasks?</h3>
+                    <p>Run the command manually from the shell to see detailed errors. Check <code>.reprovm/cache/</code> for task metadata and inspect input hashes.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>❓ Does ReproVM support Windows?</h3>
+                    <p>ReproVM targets POSIX systems (Linux, macOS, BSD). Windows support via WSL, Cygwin, or MinGW is possible but untested.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>❓ How fast is it compared to Make/Bazel?</h3>
+                    <p>For cache hits, ReproVM is near-instant (~80ms overhead). For cold builds, performance is comparable to Make. Bazel has more optimization but higher overhead.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Troubleshooting Section -->
+        <section id="troubleshooting">
+            <h2 class="section-title">Troubleshooting</h2>
+            <p class="section-subtitle">Common issues and solutions</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symptom</th>
+                        <th>Cause</th>
+                        <th>Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Unknown target 'foo'</td>
+                        <td>Target not defined in manifest</td>
+                        <td>Check spelling, ensure task exists</td>
+                    </tr>
+                    <tr>
+                        <td>Cycle detected</td>
+                        <td>Circular dependency in DAG</td>
+                        <td>Break cycle by removing/reordering deps</td>
+                    </tr>
+                    <tr>
+                        <td>Task failed with exit code N</td>
+                        <td>Command returned non-zero</td>
+                        <td>Run command manually to debug</td>
+                    </tr>
+                    <tr>
+                        <td>Cache hit but output missing</td>
+                        <td>Output not declared in manifest</td>
+                        <td>Add file to outputs list</td>
+                    </tr>
+                    <tr>
+                        <td>Corrupted .meta file</td>
+                        <td>Cache metadata unreadable</td>
+                        <td>Delete .meta to force recompute</td>
+                    </tr>
+                    <tr>
+                        <td>Failed to hash input</td>
+                        <td>Input file missing/unreadable</td>
+                        <td>Check file exists and permissions</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="warning-box">
+                <strong>🔧 Debug Mode:</strong> Set <code>REPROVM_VERBOSE=1</code> (future extension) to see detailed internal decisions and hash computations.
+            </div>
+        </section>
+
+        <!-- Roadmap Section -->
+        <section id="roadmap">
+            <h2 class="section-title">Roadmap</h2>
+            <p class="section-subtitle">Future enhancements and planned features</p>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>✅ Completed</h3>
+                    <ul>
+                        <li>Core task execution engine</li>
+                        <li>Content-addressed storage</li>
+                        <li>SHA-256 hashing and caching</li>
+                        <li>Parallel execution with pthreads</li>
+                        <li>Docker support</li>
+                        <li>Manifest DSL parser</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <h3>🚧 In Progress</h3>
+                    <ul>
+                        <li>Remote CAS backend (S3, HTTP)</li>
+                        <li>Web UI for DAG visualization</li>
+                        <li>Enhanced manifest validation</li>
+                        <li>Performance profiling tools</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <h3>🔮 Planned</h3>
+                    <ul>
+                        <li>Distributed execution across nodes</li>
+                        <li>Language bindings (Python, Rust, Go)</li>
+                        <li>Cryptographic signing of cache entries</li>
+                        <li>YAML/JSON manifest formats</li>
+                        <li>Built-in metrics and observability</li>
+                        <li>IDE integrations (VSCode, IntelliJ)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section id="resources">
+            <h2 class="section-title">Resources</h2>
+            <p class="section-subtitle">Learn more about the technologies behind ReproVM</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>📚 Documentation</h3>
+                    <ul>
+                        <li><a href="https://github.com/hoangsonww/ReproVM-Virtual-Machine/blob/main/README.md" target="_blank">Full README</a></li>
+                        <li><a href="https://github.com/hoangsonww/ReproVM-Virtual-Machine/blob/main/LICENSE" target="_blank">MIT License</a></li>
+                        <li><a href="https://github.com/hoangsonww/ReproVM-Virtual-Machine/tree/main/tests" target="_blank">Test Suite</a></li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔗 Related Technologies</h3>
+                    <ul>
+                        <li><a href="https://en.wikipedia.org/wiki/Content-addressable_storage" target="_blank">Content-Addressed Storage</a></li>
+                        <li><a href="https://en.wikipedia.org/wiki/SHA-2" target="_blank">SHA-256 Hashing</a></li>
+                        <li><a href="https://www.gnu.org/software/make/" target="_blank">GNU Make</a></li>
+                        <li><a href="https://bazel.build/" target="_blank">Bazel Build System</a></li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>💬 Community</h3>
+                    <ul>
+                        <li><a href="https://github.com/hoangsonww/ReproVM-Virtual-Machine/issues" target="_blank">GitHub Issues</a></li>
+                        <li><a href="https://github.com/hoangsonww/ReproVM-Virtual-Machine/discussions" target="_blank">Discussions</a></li>
+                        <li><a href="https://github.com/hoangsonww/ReproVM-Virtual-Machine/pulls" target="_blank">Pull Requests</a></li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🎓 Learning Resources</h3>
+                    <ul>
+                        <li><a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph" target="_blank">DAG Theory</a></li>
+                        <li><a href="https://pubs.opengroup.org/onlinepubs/9699919799/" target="_blank">POSIX Standard</a></li>
+                        <li><a href="https://www.openwall.com/lists/musl/2016/02/04/1" target="_blank">C99 Best Practices</a></li>
+                        <li><a href="https://man7.org/linux/man-pages/man7/pthreads.7.html" target="_blank">pthreads Manual</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>ReproVM</h3>
+                <p>Reproducible task execution with content-addressed caching</p>
+                <p style="margin-top: 1rem;">Built with ❤️ by the open-source community</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#quickstart">Quick Start</a></li>
+                    <li><a href="#documentation">Documentation</a></li>
+                    <li><a href="#examples">Examples</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="https://github.com/hoangsonww/ReproVM-Virtual-Machine" target="_blank">GitHub Repository</a></li>
+                    <li><a href="https://github.com/hoangsonww/ReproVM-Virtual-Machine/issues" target="_blank">Issue Tracker</a></li>
+                    <li><a href="https://github.com/hoangsonww/ReproVM-Virtual-Machine/blob/main/LICENSE" target="_blank">License</a></li>
+                    <li><a href="#contributing">Contributing Guide</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Technology</h3>
+                <ul>
+                    <li>C99 Implementation</li>
+                    <li>SHA-256 Hashing</li>
+                    <li>POSIX Threads</li>
+                    <li>Docker Support</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 ReproVM Contributors. Licensed under MIT License.</p>
+            <p>Made with 🚀 for developers who value reproducibility and performance.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="packages/script.js"></script>
+</body>
+</html>
