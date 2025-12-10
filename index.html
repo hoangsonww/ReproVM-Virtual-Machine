@@ -463,42 +463,44 @@ rm -rf .reprovm
 
                 <div class="feature-card">
                     <h3>🔍 Task Statuses</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Symbol</th>
-                                <th>Status</th>
-                                <th>Meaning</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>[ ]</td>
-                                <td>Pending</td>
-                                <td>Not yet executed</td>
-                            </tr>
-                            <tr>
-                                <td>[~]</td>
-                                <td>Running</td>
-                                <td>Currently executing</td>
-                            </tr>
-                            <tr>
-                                <td>[*]</td>
-                                <td>Skipped</td>
-                                <td>Cache hit, restored from CAS</td>
-                            </tr>
-                            <tr>
-                                <td>[✔]</td>
-                                <td>Success</td>
-                                <td>Executed successfully</td>
-                            </tr>
-                            <tr>
-                                <td>[X]</td>
-                                <td>Failed</td>
-                                <td>Command returned non-zero</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Symbol</th>
+                                    <th>Status</th>
+                                    <th>Meaning</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td data-label="Symbol">[ ]</td>
+                                    <td data-label="Status">Pending</td>
+                                    <td data-label="Meaning">Not yet executed</td>
+                                </tr>
+                                <tr>
+                                    <td data-label="Symbol">[~]</td>
+                                    <td data-label="Status">Running</td>
+                                    <td data-label="Meaning">Currently executing</td>
+                                </tr>
+                                <tr>
+                                    <td data-label="Symbol">[*]</td>
+                                    <td data-label="Status">Skipped</td>
+                                    <td data-label="Meaning">Cache hit, restored from CAS</td>
+                                </tr>
+                                <tr>
+                                    <td data-label="Symbol">[✔]</td>
+                                    <td data-label="Status">Success</td>
+                                    <td data-label="Meaning">Executed successfully</td>
+                                </tr>
+                                <tr>
+                                    <td data-label="Symbol">[X]</td>
+                                    <td data-label="Status">Failed</td>
+                                    <td data-label="Meaning">Command returned non-zero</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="feature-card">
@@ -917,47 +919,49 @@ chmod +x .git/hooks/pre-commit</pre>
             <h2 class="section-title">Troubleshooting</h2>
             <p class="section-subtitle">Common issues and solutions</p>
             
-            <table>
-                <thead>
-                    <tr>
-                        <th>Symptom</th>
-                        <th>Cause</th>
-                        <th>Solution</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Unknown target 'foo'</td>
-                        <td>Target not defined in manifest</td>
-                        <td>Check spelling, ensure task exists</td>
-                    </tr>
-                    <tr>
-                        <td>Cycle detected</td>
-                        <td>Circular dependency in DAG</td>
-                        <td>Break cycle by removing/reordering deps</td>
-                    </tr>
-                    <tr>
-                        <td>Task failed with exit code N</td>
-                        <td>Command returned non-zero</td>
-                        <td>Run command manually to debug</td>
-                    </tr>
-                    <tr>
-                        <td>Cache hit but output missing</td>
-                        <td>Output not declared in manifest</td>
-                        <td>Add file to outputs list</td>
-                    </tr>
-                    <tr>
-                        <td>Corrupted .meta file</td>
-                        <td>Cache metadata unreadable</td>
-                        <td>Delete .meta to force recompute</td>
-                    </tr>
-                    <tr>
-                        <td>Failed to hash input</td>
-                        <td>Input file missing/unreadable</td>
-                        <td>Check file exists and permissions</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Symptom</th>
+                            <th>Cause</th>
+                            <th>Solution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Symptom">Unknown target 'foo'</td>
+                            <td data-label="Cause">Target not defined in manifest</td>
+                            <td data-label="Solution">Check spelling, ensure task exists</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Symptom">Cycle detected</td>
+                            <td data-label="Cause">Circular dependency in DAG</td>
+                            <td data-label="Solution">Break cycle by removing/reordering deps</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Symptom">Task failed with exit code N</td>
+                            <td data-label="Cause">Command returned non-zero</td>
+                            <td data-label="Solution">Run command manually to debug</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Symptom">Cache hit but output missing</td>
+                            <td data-label="Cause">Output not declared in manifest</td>
+                            <td data-label="Solution">Add file to outputs list</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Symptom">Corrupted .meta file</td>
+                            <td data-label="Cause">Cache metadata unreadable</td>
+                            <td data-label="Solution">Delete .meta to force recompute</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Symptom">Failed to hash input</td>
+                            <td data-label="Cause">Input file missing/unreadable</td>
+                            <td data-label="Solution">Check file exists and permissions</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <div class="warning-box">
                 <strong>🔧 Debug Mode:</strong> Set <code>REPROVM_VERBOSE=1</code> (future extension) to see detailed internal decisions and hash computations.
