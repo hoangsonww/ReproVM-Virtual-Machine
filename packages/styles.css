@@ -34,6 +34,32 @@ body {
     overflow-x: hidden;
 }
 
+/* Links - High Contrast Colors */
+a {
+    color: #60a5fa;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #93c5fd;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #c084fc;
+}
+
+a:visited:hover {
+    color: #d8b4fe;
+}
+
+a:focus {
+    outline: 2px solid #60a5fa;
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
 /* Header & Navigation */
 header {
     position: fixed;
